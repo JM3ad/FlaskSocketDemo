@@ -1,0 +1,26 @@
+<head>
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/socket.io.js') }}"></script>
+    <script>
+    $(document).ready(function(){
+        var socket = io.connect('http://localhost:5000');
+        socket.on('my response', function(msg) {
+            console.log(msg.data);
+            $('#response').text(msg.data);
+        });
+        function sendMessage() {
+            var value = $('#input').val();
+            console.log("submitting" + value);
+            socket.emit('my event', {data: value});
+            return false;
+        };
+        $("#button").click(sendMessage);
+    });
+    </script>
+</head>
+<body>
+    <h2>Test Flask Socket Page</h2>
+    <input type="text" id="input"/>
+    <button id="button">Click to send the text over a socket</button>
+    <p id="response">This should show the socket's response</p>
+</body>
